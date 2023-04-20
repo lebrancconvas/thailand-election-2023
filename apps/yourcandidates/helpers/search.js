@@ -15,7 +15,7 @@ const DISTRICT_LIST = districts.map((district) => {
 })
 
 function normalizeSearchQuery(query) {
-  return query.replace(/\.([^\s])/g, /. \1/g)
+  return query.replace(/\.([^\s])/g, '. $1')
 }
 
 const HIGHTLIGHT_STYLE = {
@@ -25,15 +25,11 @@ const HIGHTLIGHT_STYLE = {
 
 export const searchDistrict = (query) => {
   // split query by space when before space is not .
-  const queries = normalizeSearchQuery(query).split(
-    /^(?:\s|\.)*(.*?)(?:\s|\.)+$/g
-  )
+  const queries = normalizeSearchQuery(query).split(/\s/g)
   const districts = DISTRICT_LIST.map((district) => {
     let score = 0
     let matchedIndices = []
-    const stringMenuList = district.stringMenu.split(
-      /^(?:\s|\.)*(.*?)(?:\s|\.)+$/g
-    )
+    const stringMenuList = district.stringMenu.split(/\s/g)
     for (let index = 0; index < queries.length; index++) {
       const query = queries[index]
       let currIndex = 0
