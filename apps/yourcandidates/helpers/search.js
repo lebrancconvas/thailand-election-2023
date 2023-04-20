@@ -1,7 +1,5 @@
 import districts from '~/data/district_province_list.json'
 import electorals from '~/data/electoral_district_table.json'
-import fuzzysort from 'fuzzysort'
-const SEARCH_KEYS = ['stringMenu']
 
 const DISTRICT_LIST = districts.map((district) => {
   if (district.province === 'กรุงเทพมหานคร') {
@@ -27,11 +25,15 @@ const HIGHTLIGHT_STYLE = {
 
 export const searchDistrict = (query) => {
   // split query by space when before space is not .
-  const queries = normalizeSearchQuery(query).split(/(?<!\.)\s/g)
+  const queries = normalizeSearchQuery(query).split(
+    /^(?:\s|\.)*(.*?)(?:\s|\.)+$/g
+  )
   const districts = DISTRICT_LIST.map((district) => {
     let score = 0
     let matchedIndices = []
-    const stringMenuList = district.stringMenu.split(/(?<!\.)\s/g)
+    const stringMenuList = district.stringMenu.split(
+      /^(?:\s|\.)*(.*?)(?:\s|\.)+$/g
+    )
     for (let index = 0; index < queries.length; index++) {
       const query = queries[index]
       let currIndex = 0
